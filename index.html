@@ -17,7 +17,7 @@
 
         .glass-box { 
             background: #1a1a22; border-radius: 25px; padding: 30px; text-align: center; 
-            width: 100%; max-width: 900px; margin-top: 20px;
+            width: 100%; max-width: 1050px; margin-top: 20px;
             box-shadow: 12px 12px 24px rgba(0,0,0,0.6), -8px -8px 20px rgba(255,255,255,0.03), inset 4px 4px 10px rgba(255,255,255,0.05), inset -8px -8px 18px rgba(0,0,0,0.4);
         }
 
@@ -33,15 +33,16 @@
             box-shadow: inset 5px 5px 10px rgba(0,0,0,0.7), inset -2px -2px 5px rgba(255,255,255,0.02); cursor: pointer;
         }
 
-        /* 🟢 6-Column Table 🟢 */
+        /* 🟢 7-Column Table 🟢 */
         .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; min-width: 700px; border-collapse: collapse; margin-top: 10px; border-radius: 12px; overflow: hidden; box-shadow: 4px 4px 10px rgba(0,0,0,0.5); }
+        table { width: 100%; min-width: 850px; border-collapse: collapse; margin-top: 10px; border-radius: 12px; overflow: hidden; box-shadow: 4px 4px 10px rgba(0,0,0,0.5); }
         th, td { padding: 12px; text-align: center; border-bottom: 1px solid #2a2a35; }
         th { background-color: #00bcd4; color: #000; font-weight: bold; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;}
         tr:nth-child(even) { background-color: #202028; }
         tr:nth-child(odd) { background-color: #1a1a22; }
         
         .device-badge { background: #2c2c38; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5); white-space: nowrap;}
+        .net-badge { color: #00e676; font-size: 11px; margin-left: 5px; }
 
         .swal2-popup { background: #1a1a22 !important; border-radius: 20px !important; color: #fff !important; }
         .swal2-title { color: #ff5252 !important; }
@@ -58,13 +59,13 @@
 
     <div id="dashboardSection" style="display: none; width: 100%; flex-direction: column; align-items: center;">
         
-        <div style="width: 100%; max-width: 900px; display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center;">
+        <div style="width: 100%; max-width: 1050px; display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center;">
             <h2 style="color: #00bcd4;">Advanced Analytics Data</h2>
             <button id="logoutBtn" class="btn btn-danger" style="padding: 8px 16px; font-size: 13px;">Logout</button>
         </div>
 
         <div class="glass-box" style="margin-top: 0;">
-            <p style="color: #a0a0b0; font-size: 14px; margin-bottom: 20px;">Select an exam to view deep analytics (Cheat count, time taken, device info).</p>
+            <p style="color: #a0a0b0; font-size: 14px; margin-bottom: 20px;">Select an exam to view deep analytics (Cheat count, split screen, network).</p>
             
             <select id="examSelector">
                 <option value="">-- Loading Exams... --</option>
@@ -77,13 +78,14 @@
                             <th>#</th>
                             <th>Roll / Name</th>
                             <th>Score</th>
-                            <th>Browser & OS</th>
+                            <th>Device & Network</th>
                             <th>Time Taken</th>
+                            <th>Split Screen 🪟</th>
                             <th>Warnings ⚠️</th>
                         </tr>
                     </thead>
                     <tbody id="dataTableBody">
-                        <tr><td colspan="6" style="color: #888;">Select an exam to view data</td></tr>
+                        <tr><td colspan="7" style="color: #888;">Select an exam to view data</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -157,18 +159,18 @@
         examSelector.addEventListener('change', async (e) => {
             const examId = e.target.value;
             if(!examId) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="color: #888;">Select an exam to view data</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="7" style="color: #888;">Select an exam to view data</td></tr>';
                 return;
             }
 
-            tableBody.innerHTML = '<tr><td colspan="6" style="color: #00bcd4;">Loading advanced data...</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="7" style="color: #00bcd4;">Loading advanced data...</td></tr>';
 
             try {
                 const q = query(collection(db, "results"), where("examId", "==", examId));
                 const snapshot = await getDocs(q);
                 
                 if (snapshot.empty) {
-                    tableBody.innerHTML = '<tr><td colspan="6" style="color: #ffb74d;">No submissions yet.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="7" style="color: #ffb74d;">No submissions yet.</td></tr>';
                     return;
                 }
 
@@ -179,25 +181,28 @@
                 tableBody.innerHTML = "";
                 submissions.forEach((sub, index) => {
                     const deviceDisplay = sub.device || "Unknown ❓";
+                    const networkDisplay = sub.network ? `(${sub.network})` : "";
                     const timeDisplay = sub.timeTaken || "N/A ⏱";
                     const cheatCount = (sub.cheatCount !== undefined) ? sub.cheatCount : 0;
+                    const splitScreenStatus = sub.splitScreen || "No";
                     
-                    // Highlight Cheaters
                     const cheatBadge = cheatCount > 0 ? `<span style="color:#ff5252; font-weight:bold;">${cheatCount} Switches</span>` : `<span style="color:#00e676;">Clean</span>`;
+                    const splitBadge = splitScreenStatus === "Yes" ? `<span style="color:#ff5252; font-weight:bold;">Yes ⚠️</span>` : `<span style="color:#00e676;">No</span>`;
 
                     tableBody.innerHTML += `
                         <tr>
                             <td>${index + 1}</td>
                             <td style="font-weight:bold; color: #fff;">${sub.rollNumber || "N/A"}</td>
                             <td style="color:#00e676; font-weight:bold; font-size:16px;">${sub.score}</td>
-                            <td><span class="device-badge">${deviceDisplay}</span></td>
+                            <td><span class="device-badge">${deviceDisplay} <span class="net-badge">${networkDisplay}</span></span></td>
                             <td style="color:#ffb74d; font-weight:bold; font-size: 13px;">${timeDisplay}</td>
+                            <td>${splitBadge}</td>
                             <td>${cheatBadge}</td>
                         </tr>
                     `;
                 });
             } catch (error) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="color: #ff5252;">Error fetching data.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="7" style="color: #ff5252;">Error fetching data.</td></tr>';
             }
         });
     </script>
