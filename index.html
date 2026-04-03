@@ -21,6 +21,21 @@
 
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, -30px) scale(1.05); } }
 
+        /* 🟢 Admin Navbar 🟢 */
+        .admin-navbar {
+            display: none; justify-content: space-between; align-items: center; 
+            padding: 15px 30px; background: #15151a; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); width: 100%; transition: 0.4s; z-index: 1000; position: sticky; top: 0;
+        }
+        .admin-navbar h2 { margin: 0; color: #ff5252; font-size: 22px; font-weight: 900; letter-spacing: 1px; }
+        .nav-right-items { display: flex; gap: 15px; align-items: center; }
+        
+        .top-logout-btn {
+            background: rgba(255, 82, 82, 0.1); color: #ff5252; border: 1px solid rgba(255, 82, 82, 0.3);
+            padding: 8px 16px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .top-logout-btn:hover { background: #ff5252; color: #fff; box-shadow: 0 4px 10px rgba(255, 82, 82, 0.3); }
+
         /* 🟢 Core Forms & Inputs 🟢 */
         h2, h3, h4 { margin-bottom: 20px; color: #00bcd4; transition: 0.4s;}
         .input-group { margin-bottom: 20px; width: 100%; }
@@ -52,12 +67,14 @@
             box-shadow: 15px 15px 30px rgba(0,0,0,0.6), -10px -10px 25px rgba(255,255,255,0.02), inset 4px 4px 10px rgba(255,255,255,0.05), inset -6px -6px 20px rgba(0,0,0,0.4);
             border: 1px solid rgba(255,255,255,0.02); transition: 0.4s;
         }
+        
+        #passGroup { display: none; } /* Hidden initially for logic */
 
         /* 🟢 Layout: SaaS Sidebar Dashboard 🟢 */
-        #adminDashboardLayout { display: none; height: 100vh; width: 100%; overflow: hidden; }
+        #adminDashboardLayout { display: none; height: calc(100vh - 65px); width: 100%; overflow: hidden; }
         
         .sidebar {
-            width: 280px; height: calc(100vh - 40px); margin: 20px 0 20px 20px; flex-shrink: 0;
+            width: 280px; height: calc(100vh - 105px); margin: 20px 0 20px 20px; flex-shrink: 0;
             background: #1e1e26; border-radius: 30px; padding: 30px 20px;
             box-shadow: 12px 12px 25px rgba(0,0,0,0.5), -8px -8px 20px rgba(255,255,255,0.02), inset 3px 3px 8px rgba(255,255,255,0.05), inset -5px -5px 15px rgba(0,0,0,0.4);
             border: 1px solid rgba(255, 255, 255, 0.02); display: flex; flex-direction: column; transition: 0.4s;
@@ -80,13 +97,7 @@
             border: 1px solid rgba(0, 188, 212, 0.1);
         }
 
-        .nav-divider { border: 0; height: 1px; background: rgba(255,255,255,0.05); margin: 15px 0; }
-        .btn-view-user { color: #ffb74d; }
-        .btn-view-user:hover { background: rgba(255, 183, 77, 0.1); color: #ffb74d; }
-        .btn-logout { color: #ff5252; }
-        .btn-logout:hover { background: rgba(255, 82, 82, 0.1); color: #ff5252; }
-
-        .main-content-area { flex-grow: 1; padding: 20px 30px; height: 100vh; overflow-y: auto; }
+        .main-content-area { flex-grow: 1; padding: 20px 30px; height: 100%; overflow-y: auto; }
         .main-content-area::-webkit-scrollbar { width: 8px; }
         .main-content-area::-webkit-scrollbar-thumb { background: rgba(0, 188, 212, 0.5); border-radius: 10px; }
 
@@ -120,9 +131,9 @@
         .action-buttons-row button { flex: 1; min-width: 150px; }
 
         .theme-toggle-floating {
-            position: absolute; top: 25px; right: 30px; background: transparent; color: #ffd700; border: none; 
-            width: 45px; height: 45px; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;
-            transition: 0.3s; z-index: 100;
+            background: transparent; color: #ffd700; border: none; 
+            width: 40px; height: 40px; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;
+            transition: 0.3s;
         }
         .theme-toggle-floating:hover { transform: rotate(20deg) scale(1.1); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)); }
 
@@ -136,7 +147,7 @@
         .result-close-btn { position: absolute; top: 20px; right: 25px; color: #888; font-size: 28px; cursor: pointer; font-weight: bold; transition: 0.2s; z-index: 50;}
         .result-close-btn:hover { color: #ff5252; }
 
-        .hamburger-btn { display: none; position: absolute; top: 20px; left: 20px; background: transparent; border: none; z-index: 3000; cursor: pointer; }
+        .hamburger-btn { display: none; background: transparent; border: none; z-index: 3000; cursor: pointer; }
         .hamburger-btn svg { width: 35px; height: 35px; fill: #00bcd4; }
         .mobile-sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2500; display: none; backdrop-filter: blur(3px); }
 
@@ -153,13 +164,18 @@
         /* 🟡🟢 LIGHT MODE 🟢🟡 */
         body.light-mode { background-color: #F0EBE1; color: #2C3539; } 
         body.light-mode .bg-blobs { opacity: 0.05; filter: blur(100px); }
+        
+        body.light-mode .admin-navbar { background: #E8E0D5; border-bottom: 1px solid rgba(102, 76, 40, 0.1); box-shadow: 0 4px 15px rgba(102, 76, 40, 0.15); }
+        body.light-mode .admin-navbar h2 { color: #D32F2F; }
+        body.light-mode .top-logout-btn { background: #FDFCF9; box-shadow: 2px 2px 5px rgba(102, 76, 40, 0.1); }
+        
         body.light-mode .login-clay-box, body.light-mode .sidebar, body.light-mode .clay-box, body.light-mode .result-modal-content { background: #FDFCF9; border: 1px solid rgba(102, 76, 40, 0.1); box-shadow: 12px 12px 25px rgba(102, 76, 40, 0.1), -8px -8px 20px #ffffff, inset 3px 3px 8px #ffffff, inset -5px -5px 15px rgba(102, 76, 40, 0.05); }
         body.light-mode .brand-title { color: #008394; }
         body.light-mode h2, body.light-mode h3, body.light-mode h4, body.light-mode label { color: #664C28; }
         body.light-mode .nav-item { color: #666; }
         body.light-mode .nav-item:hover { background: rgba(102, 76, 40, 0.05); color: #222; }
         body.light-mode .nav-item.active { background: #F0EBE1; color: #008394; box-shadow: inset 4px 4px 8px rgba(102, 76, 40, 0.15), inset -2px -2px 5px #ffffff; border-color: rgba(0, 131, 148, 0.2); }
-        body.light-mode .nav-divider { background: rgba(102, 76, 40, 0.1); }
+        
         body.light-mode input, body.light-mode textarea, body.light-mode select { background: #F0EBE1; color: #333; border: 1px solid rgba(102, 76, 40, 0.1); box-shadow: inset 4px 4px 8px rgba(102, 76, 40, 0.15), inset -2px -2px 5px #ffffff; }
         body.light-mode input:focus, body.light-mode textarea:focus, body.light-mode select:focus { box-shadow: inset 6px 6px 12px rgba(102, 76, 40, 0.2); border-color: #E1A95F;}
         body.light-mode select option { background: #F0EBE1; color: #333; }
@@ -182,10 +198,13 @@
             .sidebar.active { left: 0; }
             .hamburger-btn { display: block; }
             .mobile-sidebar-overlay.active { display: block; }
-            .main-content-area { padding: 80px 15px 20px 15px; }
+            .main-content-area { padding: 20px 15px; }
             .clay-box { padding: 25px 20px; }
             .action-buttons-row { flex-direction: column; }
             .result-modal-content { padding: 25px 15px; width: 95%; }
+            
+            .admin-navbar { padding: 15px 20px; }
+            .admin-navbar h2 { font-size: 18px; }
         }
     </style>
 </head>
@@ -195,32 +214,40 @@
 
     <div class="bg-blobs"><div class="blob blob1"></div><div class="blob blob2"></div></div>
 
+    <nav class="admin-navbar" id="adminNavbar">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="hamburger-btn" id="hamburgerBtn"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+            <h2>Admin Portal</h2>
+        </div>
+        <div class="nav-right-items">
+            <button class="theme-toggle-floating" id="themeToggleBtn">🌞</button>
+            <button class="top-logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
     <div id="loginSection">
         <div class="login-clay-box">
-            <h1 style="color: #ff5252; margin-bottom: 10px; font-size: 28px;">Admin Portal</h1>
-            <p style="color:#b3b3b3; font-size:14px; margin-bottom:30px;">Enter your admin credentials to continue.</p>
+            <h1 style="color: #ff5252; margin-bottom: 10px; font-size: 28px;">Admin Login</h1>
+            <p id="loginHelperText" style="color:#b3b3b3; font-size:14px; margin-bottom:30px;">Enter your admin email to verify access.</p>
             
             <form id="adminLoginForm">
                 <div class="input-group" style="text-align: left;">
                     <label>Admin Email</label>
-                    <input type="email" id="adminEmail" required placeholder="admin@example.com" autocomplete="email">
+                    <input type="email" id="adminEmail" required placeholder="admin@example.com" autocomplete="username">
                 </div>
-                <div class="input-group" style="text-align: left; margin-bottom: 30px;">
-                    <label>Password</label>
-                    <input type="password" id="adminPass" required placeholder="••••••••" autocomplete="current-password">
+                
+                <div class="input-group" id="passGroup" style="text-align: left; margin-bottom: 30px;">
+                    <label id="passLabel">Password</label>
+                    <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password">
                 </div>
-                <button type="submit" id="adminLoginBtn" class="login-btn">
-                    Login to Command Center
-                </button>
+                
+                <button type="submit" id="adminLoginBtn" class="login-btn">Verify Email</button>
             </form>
         </div>
     </div>
 
     <div id="adminDashboardLayout">
-        
-        <button class="hamburger-btn" id="hamburgerBtn"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
         <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
-        <button class="theme-toggle-floating" id="themeToggleBtn">🌞</button>
 
         <aside class="sidebar" id="sidebar">
             <div class="brand-title">Workspace</div>
@@ -230,9 +257,6 @@
                 <button class="nav-item" onclick="window.location.href='evaluation.html'">✍️ Evaluate Written</button>
                 <button class="nav-item" data-target="tab-manage">⚙️ Management</button>
                 <button class="nav-item" data-target="tab-db">🗄️ Database Mgt.</button>
-                <hr class="nav-divider">
-                <button class="nav-item btn-view-user" id="viewUserPanelBtn">👤 View User Panel</button>
-                <button class="nav-item btn-logout" id="logoutBtn">🚪 Logout</button>
             </nav>
         </aside>
 
@@ -359,7 +383,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
         // 🟢 IMPORT EMAIL/PASSWORD AUTH 🟢
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, getDoc, updateDoc, deleteDoc, setDoc, where } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
         // Theme Init
@@ -384,17 +408,19 @@
             });
         });
 
-        document.getElementById('viewUserPanelBtn').addEventListener('click', () => { sessionStorage.setItem('viewAsUser', 'true'); window.location.href = "index.html"; });
-
         // FIREBASE CONFIG
         const firebaseConfig = { apiKey: "AIzaSyCxJ80HE80F0FEsb1jZpal_YNL6s0S_9xE", authDomain: "mcq-portal-904fd.firebaseapp.com", projectId: "mcq-portal-904fd", storageBucket: "mcq-portal-904fd.firebasestorage.app", messagingSenderId: "977853699063", appId: "1:977853699063:web:0fb1b7e2be9afadb7b54f2" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
         const IMGBB_API_KEY = "35b7e96a7a04b874aa3e4a2949ff11cc"; 
+        
+        // 🔴 Your Allowed Admin Emails 🔴
         const ADMIN_EMAILS = ["hridoymeruet@gmail.com", "mcqportal198@gmail.com"]; 
         let allExamsData = {};
 
-        const loginSection = document.getElementById('loginSection'); const adminDashboardLayout = document.getElementById('adminDashboardLayout');
+        const loginSection = document.getElementById('loginSection'); 
+        const adminDashboardLayout = document.getElementById('adminDashboardLayout');
+        const adminNavbar = document.getElementById('adminNavbar');
         const resultModal = document.getElementById('resultModal'); const closeResultModal = document.getElementById('closeResultModal'); const resultTableBody = document.getElementById('resultTableBody');
         const historyModal = document.getElementById('historyModal'); const closeHistoryModal = document.getElementById('closeHistoryModal'); const historyTableBody = document.getElementById('historyTableBody'); const historyStudentDetails = document.getElementById('historyStudentDetails');
         const editQModal = document.getElementById('editQModal'); const closeEditQModal = document.getElementById('closeEditQModal');
@@ -402,12 +428,15 @@
         closeResultModal.addEventListener('click', () => resultModal.classList.remove('show')); closeHistoryModal.addEventListener('click', () => historyModal.classList.remove('show')); closeEditQModal.addEventListener('click', () => editQModal.classList.remove('show')); 
         window.addEventListener('click', (e) => { if(e.target === resultModal) resultModal.classList.remove('show'); if(e.target === historyModal) historyModal.classList.remove('show'); if(e.target === editQModal) editQModal.classList.remove('show'); });
 
-        // 🟢 ADMIN AUTHENTICATION LOGIC 🟢
+        // 🟢 DYNAMIC ADMIN AUTHENTICATION LOGIC 🟢
+        let loginMode = "email"; // States: "email", "login", "signup"
+
         onAuthStateChanged(auth, (user) => { 
             if (user) { 
                 if (ADMIN_EMAILS.includes(user.email)) { 
                     loginSection.style.display = "none"; 
                     adminDashboardLayout.style.display = "flex"; 
+                    adminNavbar.style.display = "flex";
                     loadExamsIntoDropdowns(); 
                 } else { 
                     Swal.fire('Access Denied!', 'You do not have admin privileges.', 'error'); 
@@ -416,24 +445,88 @@
             } else { 
                 loginSection.style.display = "flex"; 
                 adminDashboardLayout.style.display = "none"; 
+                adminNavbar.style.display = "none";
+                
+                // Reset form state
+                loginMode = "email";
+                document.getElementById('passGroup').style.display = "none";
+                document.getElementById('adminEmail').readOnly = false;
+                document.getElementById('adminLoginBtn').innerText = "Verify Email";
+                document.getElementById('loginHelperText').innerText = "Enter your admin email to verify access.";
             } 
         });
 
         document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('adminEmail').value.trim();
-            const password = document.getElementById('adminPass').value;
+            const emailInput = document.getElementById('adminEmail');
+            const passInput = document.getElementById('adminPass');
+            const email = emailInput.value.trim();
+            const password = passInput.value;
             const btn = document.getElementById('adminLoginBtn');
-            const originalText = btn.innerText;
+            const helperText = document.getElementById('loginHelperText');
+            const passLabel = document.getElementById('passLabel');
 
+            if (loginMode === "email") {
+                if (!ADMIN_EMAILS.includes(email)) {
+                    Swal.fire({ icon: 'error', title: 'Unauthorized', text: 'This email is not authorized for Admin Panel.', background: document.body.classList.contains('light-mode') ? '#FDFCF9' : '#1e1e26', color: document.body.classList.contains('light-mode') ? '#222' : '#fff' });
+                    return;
+                }
+
+                btn.innerText = "Checking...";
+                btn.disabled = true;
+
+                try {
+                    // Check if user already exists
+                    const methods = await fetchSignInMethodsForEmail(auth, email);
+                    
+                    document.getElementById('passGroup').style.display = "block";
+                    emailInput.readOnly = true; // Lock email input
+                    passInput.setAttribute("required", "true");
+                    
+                    if (methods.length > 0) {
+                        // User exists, show normal login
+                        loginMode = "login";
+                        helperText.innerText = "Email verified. Enter your password.";
+                        passLabel.innerText = "Password";
+                        btn.innerText = "Login to Command Center";
+                    } else {
+                        // User does NOT exist, show password creation
+                        loginMode = "signup";
+                        helperText.innerText = "Welcome new admin! Please set a secure password.";
+                        passLabel.innerText = "Create New Password";
+                        btn.innerText = "Set Password & Login";
+                        passInput.focus();
+                    }
+                } catch (error) {
+                    Swal.fire('Error', 'Network error. Please try again.', 'error');
+                }
+                btn.disabled = false;
+                return;
+            }
+
+            // If we are here, we are either in "login" or "signup" mode
             btn.innerText = "Authenticating...";
             btn.disabled = true;
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                if (loginMode === "signup") {
+                    if (password.length < 6) {
+                        Swal.fire({ icon: 'warning', title: 'Too short', text: 'Password must be at least 6 characters.', background: document.body.classList.contains('light-mode') ? '#FDFCF9' : '#1e1e26', color: document.body.classList.contains('light-mode') ? '#222' : '#fff' });
+                        btn.innerText = "Set Password & Login";
+                        btn.disabled = false;
+                        return;
+                    }
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    // Login happens automatically after creation
+                } else if (loginMode === "login") {
+                    await signInWithEmailAndPassword(auth, email, password);
+                }
             } catch (error) {
-                Swal.fire({ icon: 'error', title: 'Login Failed', text: 'Invalid email or password.', background: document.body.classList.contains('light-mode') ? '#FDFCF9' : '#1e1e26', color: document.body.classList.contains('light-mode') ? '#222' : '#fff' });
-                btn.innerText = originalText;
+                let msg = "Invalid password.";
+                if(error.code === "auth/too-many-requests") msg = "Too many failed attempts. Try again later.";
+                
+                Swal.fire({ icon: 'error', title: 'Login Failed', text: msg, background: document.body.classList.contains('light-mode') ? '#FDFCF9' : '#1e1e26', color: document.body.classList.contains('light-mode') ? '#222' : '#fff' });
+                btn.innerText = loginMode === "login" ? "Login to Command Center" : "Set Password & Login";
                 btn.disabled = false;
             }
         });
